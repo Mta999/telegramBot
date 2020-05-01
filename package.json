@@ -1,0 +1,19 @@
+{
+  "name": "telegramBot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node index.ts "
+  },
+  "dependencies": {
+    "@types/node-telegram-bot-api": "^0.40.3",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.9.11",
+    "node-telegram-bot-api": "^0.40.0",
+    "telegraf": "^3.38.0",
+    "types": "^0.1.1"
+  }
+}
