@@ -1,19 +1,28 @@
 {
-  "name": "telegramBot",
+  "name": "telegrambot",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "lint": "tslint --project tsconfig.json",
+    "lint:fix": "tslint --fix --project tsconfig.json",
     "start": "ts-node index.ts "
   },
   "dependencies": {
-    "@types/node-telegram-bot-api": "^0.40.3",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "dotenv": "^8.2.0",
     "mongoose": "^5.9.11",
     "node-telegram-bot-api": "^0.40.0",
     "telegraf": "^3.38.0",
-    "types": "^0.1.1"
+    "telegraf-calendar-telegram": "^1.5.7",
+    "tslint": "^6.1.1"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.40.3",
+    "@types/mongoose": "^5.7.8",
+    "@types/node": "^13.11.1",
+    "types": "^0.1.1",
+    "typescript": "^3.8.3"
   }
 }
