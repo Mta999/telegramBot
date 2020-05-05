@@ -1,92 +1,79 @@
-// import { firstQuestion } from './buttons/questions/index';
-import { startCommand, helpCommand } from "./commands/index"
+import { connectReportDb } from './dbs/reportsDb/index';
+import { User, UserInterface } from './model/user';
+import { connectBotDb, } from './dbs/botsDb/index';
+import { toDbAndStart, helpCommand, myReportsByDate } from "./commands/index"
 import "./env"
-import   Telegraf, {Extra}  from "telegraf";
-import { connect, model, Schema, Document, Model } from 'mongoose';
+import Telegraf from "telegraf";
+
+// const Telegraf = require("telegraf")
+const Calendar = require("telegraf-calendar-telegram");
 
 
 const mongoUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017';
-const database = process.env.MONGODB_DATABASE_USERS || 'users';
+const dbForUsers = process.env.MONGODB_DATABASE_BOT_DAILY_REPORTS || 'botDailyReports';
+const uriBot: string = [mongoUrl, dbForUsers].join('/');
 
+const dbForReports = process.env.MONGODB_DATABASE_REPORTS || 'reports';
+const uriReports: string = [mongoUrl, dbForReports].join('/');
 
-const uri: string = [mongoUrl, database].join('/');
+(async () => {
+  await connectBotDb(uriBot);
+})();
 
-// console.log(uri)
+(async () => {
+  await connectReportDb(uriReports);
+})();
 
-const token = process.env.BOT_TOKEN
+const token = process.env.BOT_TOKEN;
 
-const bot = new Telegraf(token)
+const bot = new Telegraf(token);
 
+const calendar = new Calendar(bot);
 
-
-
-const UserSchema = new Schema({
-  userName: String,
-  id: String,
+calendar.setDateListener(async (context, date) => {
+ const x = await myReportsByDate(context)
+  // console.log(new Date(date))
+ return context.reply(x)
 });
 
-interface UserInterface extends Document  {
-  userName: string;
-  id: string;
-}
+bot.command("calendar", context => {
+  // console.log(context)
+ return context.reply("Here you are", calendar.getCalendar()
+ )});
 
-const User = async (): Promise<Model<UserInterface,{}>> => {
-  await connect(uri, (err: any) => {
-      if (err) {
-          console.error(err.message);
-      } else {
-          console.log(' Connected! ');
-      }
-  });
-  return model<UserInterface>('users', UserSchema, 'users');
+
+// ****BotId: 1138911172****,
+bot.start(toDbAndStart)
+
+bot.help(helpCommand)
+
+bot.launch()
+bot.on('sticker', (ctx) => ctx.reply('լավն էր'))
+bot.hears('My reports', myReportsByDate)
+
+export {
+  UserInterface, User
 };
 
-const getAllUsers = async (): Promise<UserInterface[]> => {
-  console.log("get all users")
-  const model = await User();
-  console.log(model.find)
-  return await model.find();
 
-};
+
+
+
+
+
+
+
 
 // const allUsers = async () => {
 //   try {
 //     const users = await getAllUsers();
 //     console.log("users",users)
 //   } catch (error) {
-//       console.error();       ****id: 1138911172,
+//       console.error();       
 //   }
 // };
 
 // allUsers()
-
-bot.start(async(ctx)=>{
-  const botInfo =ctx.botInfo
-  await model.findOne({
-      if (botinfo) {
-        
-      },
-   });
-})
-bot.help(helpCommand)
-bot.launch()
-
-bot.on('sticker', (ctx) => ctx.reply('լավն էր'))
-
-export {
-  UserSchema, UserInterface, User
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 // bot.hears('լավ ես՞', (ctx) => ctx.reply('լավ եմ, դու՞'))
@@ -116,4 +103,4 @@ export {
 //   ctx.reply("2",testMenu).then(() => {
 //     ctx.reply("1",aboutMenu)
 //   })
-// })
+// }) 
