@@ -1,9 +1,8 @@
-import { Calendar } from 'telegraf-calendar-telegram';
 import { Extra } from 'telegraf';
 import { User } from '../model/user';
 
 
-const menu = Extra
+ export const menu = Extra
   .markdown()
   .markup((m) => m.keyboard([
     m.callbackButton('My reports'), //button in keyboard "lava" 
@@ -12,9 +11,16 @@ const menu = Extra
 
 
 
+export const yesOrRemindMeLater = Extra
+  .markdown()
+  .markup((m) => m.keyboard([
+    m.callbackButton('yes'), //button in keyboard "lava" 
+    m.callbackButton('remind me later'),
+  ]).resize())
+
 export const toDbAndStart = async (ctx) => {
-
-
+  console.log(ctx.message);
+  
   const startCommand = ((ctx) => {
     ctx.reply("Բայլուս").then(() => {
       ctx.reply("ինչ կա՞, լավ ես՞", menu)
@@ -32,7 +38,9 @@ export const toDbAndStart = async (ctx) => {
       {
         // setOnInsert: { dateAdded: new Date() },
         id: userId,
-        userName: ctx.from.first_name,
+        isBotOrNo:ctx.from.is_bot,
+        firstName: ctx.from.first_name,
+        lastName:ctx.from.last_name
       })
   } else {
     console.log("goyutyun uni userData")

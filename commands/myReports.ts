@@ -1,14 +1,24 @@
+import { reduce, isEmpty } from 'lodash';
 import { Report } from './../model/report';
 
-export const myReportsByDate = async (ctx) => {
-
+export const myReportsByDate = async (ctx, date) => {
   const model = await Report();
   const userId = ctx.from.id;
-  const reportData = await model.findOne({ id: userId })
+  const reportData = await model.find({ id: userId })
+  console.log(reportData);
+  const oneReportData = reduce(reportData, (acc, el) => {
+    const shortCreationTime = el.createdAt.toISOString().split("T")[0]
 
-  // console.log(reportData)
+    if (shortCreationTime === date) {
+      acc.push(el)
+    }
+    return acc
+  }, [])
 
-  if (reportData) {
+  console.log("oneReportData-----", oneReportData);
+
+
+  if (!isEmpty(oneReportData)) {
     const {
       question1,
       question2,
@@ -16,8 +26,9 @@ export const myReportsByDate = async (ctx) => {
       question4,
       question5,
       question6
-    } = reportData.toObject();
-     return { 
+    } = reportData[0].toObject();
+    console.log("ka reportData")
+    return {
       question1,
       question2,
       question3,
@@ -25,10 +36,9 @@ export const myReportsByDate = async (ctx) => {
       question5,
       question6
     }
-      console.log("ka reportData")
-  } else {
-    ctx.reply("Oops! You have no data")
-    console.log("CHka reportData")
   }
-
+  else {
+    return "Oops! You have no data"
+  }
 }
+
