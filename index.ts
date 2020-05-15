@@ -1,14 +1,23 @@
+import { Telegraf, Stage } from 'telegraf';
+import WizardScene from 'telegraf/scenes/wizard';
+const session = require('telegraf/session');
+
+// tslint:disable-next-line: no-var-requires
+const Calendar = require('telegraf-calendar-telegram');
+
+import { User, UserInterface } from './model/user';
+import { toDbAndStart, helpCommand, myReportsByDate } from './commands/index';
+
 import { map } from 'lodash';
-import Telegraf from "telegraf";
 import { yesOrRemindMeLater, menu } from './commands/start';
 import { connectReportDb } from './db/reportsDb/index';
-import { User, UserInterface } from './model/user';
-import { toDbAndStart, helpCommand, myReportsByDate } from "./commands/index"
-import "./env"
+
+import './env';
+
+
 
 var schedule = require('node-schedule');
 
-const Calendar = require("telegraf-calendar-telegram");
 
 const mongoUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017'
 
@@ -111,64 +120,3 @@ bot.launch()
 export {
   UserInterface, User
 };
-
-
-
-
-
-// const telegramDate = new Date(date).toISOString().split("T")[0];
-// console.log("telegramDate---",telegramDate) // 1970-01-09 same 
-// console.log(new Date(date).toISOString() )
-
-//****** 1970-01-09T00:00:00.000Z **** from calendar
-
-// bot.command("calendar", context => {
-//   // console.log(context)
-//   return context.reply("Here you are", calendar.getCalendar()
-//   )
-// });
-
-
-
-
-
-// const allUsers = async () => {
-//   try {
-//     const users = await getAllUsers();
-//     console.log("users",users)
-//   } catch (error) {
-//       console.error();       
-//   }
-// };
-
-// allUsers()
-
-
-// bot.hears('լավ ես՞', (ctx) => ctx.reply('լավ եմ, դու՞'))
-
-
-// const testMenu = Extra
-//   .markdown()
-//   .markup((m) => m.inlineKeyboard([
-//     m.callbackButton('ինչի է հավասար 1 + 1', 'test')
-//   ]))
-
-// const aboutMenu = Extra
-//   .markdown()
-//   .markup((m) => m.keyboard([
-//     m.callbackButton('2'), //button in keyboard "lava" 
-//     m.callbackButton('3'),
-//     m.callbackButton('11')
-//   ]).resize())
-
-// bot.hears('test', (ctx) => {
-//   ctx.reply( "", testMenu).then(() => {
-//     ctx.reply("",aboutMenu)
-//   })
-// })
-
-// bot.hears('test', (ctx) => {
-//   ctx.reply("2",testMenu).then(() => {
-//     ctx.reply("1",aboutMenu)
-//   })
-// }) 
