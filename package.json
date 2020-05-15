@@ -6,7 +6,9 @@
   "scripts": {
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --fix --project tsconfig.json",
-    "start": "ts-node index.ts "
+    "build": "rimraf dist && tsc -p ./tsconfig.json",
+    "start": "ts-node index.ts",
+    "start:build": "node -r source-map-support/register dist/index.js"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -14,14 +16,16 @@
     "dotenv": "^8.2.0",
     "mongoose": "^5.9.11",
     "node-telegram-bot-api": "^0.40.0",
+    "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.19",
     "telegraf": "^3.38.0",
     "telegraf-calendar-telegram": "^1.5.7",
     "tslint": "^6.1.1"
   },
   "devDependencies": {
-    "@types/node-telegram-bot-api": "^0.40.3",
     "@types/mongoose": "^5.7.8",
     "@types/node": "^13.11.1",
+    "@types/node-telegram-bot-api": "^0.40.3",
     "types": "^0.1.1",
     "typescript": "^3.8.3"
   }

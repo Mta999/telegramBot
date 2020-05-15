@@ -1,12 +1,18 @@
-import { connectReportDb } from './dbs/reportsDb/index';
-import { User, UserInterface } from './model/user';
-import { connectBotDb, } from './dbs/botsDb/index';
-import { toDbAndStart, helpCommand, myReportsByDate } from "./commands/index"
-import "./env"
-import Telegraf from "telegraf";
+import { Telegraf, Stage } from 'telegraf';
+import WizardScene from 'telegraf/scenes/wizard';
+const session = require('telegraf/session');
 
-// const Telegraf = require("telegraf")
-const Calendar = require("telegraf-calendar-telegram");
+// tslint:disable-next-line: no-var-requires
+const Calendar = require('telegraf-calendar-telegram');
+
+import { User, UserInterface } from './model/user';
+import { toDbAndStart, helpCommand, myReportsByDate } from './commands/index';
+import { connectBotDb, } from './dbs/botsDb/index';
+import { connectReportDb } from './dbs/reportsDb/index';
+
+import './env';
+
+
 
 
 const mongoUrl = process.env.MONGODB_URL || 'mongodb://localhost:27017';
@@ -31,25 +37,25 @@ const bot = new Telegraf(token);
 const calendar = new Calendar(bot);
 
 calendar.setDateListener(async (context, date) => {
- const x = await myReportsByDate(context)
+ const x = await myReportsByDate(context);
   // console.log(new Date(date))
- return context.reply(x)
+ return context.reply(x);
 });
 
-bot.command("calendar", context => {
+bot.command('calendar', context => {
   // console.log(context)
- return context.reply("Here you are", calendar.getCalendar()
- )});
+ return context.reply('Here you are', calendar.getCalendar()
+ ); });
 
 
 // ****BotId: 1138911172****,
-bot.start(toDbAndStart)
+bot.start(toDbAndStart);
 
-bot.help(helpCommand)
+bot.help(helpCommand);
 
-bot.launch()
-bot.on('sticker', (ctx) => ctx.reply('լավն էր'))
-bot.hears('My reports', myReportsByDate)
+bot.launch();
+bot.on('sticker', (ctx) => ctx.reply('լավն էր'));
+bot.hears('My reports', myReportsByDate);
 
 export {
   UserInterface, User
