@@ -1,49 +1,36 @@
-import { Extra } from 'telegraf';
+import { Extra, Markup } from 'telegraf';
 import { User } from '../model/user';
 
 
- export const menu = Extra
-  .markdown()
-  .markup((m) => m.keyboard([
-    m.callbackButton('My reports'), //button in keyboard "lava" 
-    m.callbackButton('Support'),
-  ]).resize())
+ export const menu = Markup.keyboard([
+   ['My reports', 'Support']
+  ]).oneTime()
+  .resize();
 
-
-
-export const yesOrRemindMeLater = Extra
-  .markdown()
-  .markup((m) => m.keyboard([
-    m.callbackButton('yes'), //button in keyboard "lava" 
-    m.callbackButton('remind me later'),
-  ]).resize())
+export const yesOrRemindMeLater =  Markup.keyboard([
+  ['Yes', 'Remind me Later']
+  ]).oneTime()
+  .resize();
 
 export const toDbAndStart = async (ctx) => {
-  console.log(ctx.message);
-  
   const startCommand = ((ctx) => {
-    ctx.reply("Բայլուս").then(() => {
-      ctx.reply("ինչ կա՞, լավ ես՞", menu)
-    })
-  })
+      ctx.telegram.sendMessage(ctx.chat.id, 'Բայլուս', Extra.markup(menu)); // , menu
+  }); 
   startCommand(ctx);
-
   
   const model = await User();
   const userId = ctx.from.id;
-  const userData = await model.findOne({ id: userId })
-  // console.log(userData)
+  const userData = await model.findOne({ id: userId });
   if (!userData) {
     await model.create(
       {
-        // setOnInsert: { dateAdded: new Date() },
         id: userId,
-        isBotOrNo:ctx.from.is_bot,
+        isBotOrNo: ctx.from.is_bot,
         firstName: ctx.from.first_name,
-        lastName:ctx.from.last_name
-      })
+        lastName: ctx.from.last_name
+      });
   } else {
-    console.log("goyutyun uni userData")
-    return
+    console.log('goyutyun uni userData');
+    return;
   }
-}
+};

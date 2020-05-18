@@ -2,16 +2,16 @@ import { Schema, Model, model, Document } from 'mongoose';
 
 export const UserSchema = new Schema({
     id: String,
-    isBotOrNo:Boolean,
+    isBotOrNo: Boolean,
     firstName: String,
-    lastName:String
+    lastName: String
 });
 
 export interface UserInterface extends Document {
-    id: string,
-    isBotOrNo: boolean,
-    firstName: string,
-    lastName:string
+    id: string;
+    isBotOrNo: boolean;
+    firstName: string;
+    lastName: string;
 }
 
 export const User = async (): Promise<Model<UserInterface, {}>>  => {

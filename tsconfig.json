@@ -1,9 +1,18 @@
 {
-    "compilerOptions": {
-      "target": "es6",
-      "module": "commonjs",
-      "outDir": "dist",
-      "sourceMap": true,
-      "typeRoots": ["./node_modules/@types", "./src/@types"]
-    },
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "target": "es6",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": true,
+    "sourceMap": true,
+    "pretty": true, 
   }
+}

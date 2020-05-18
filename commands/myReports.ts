@@ -4,19 +4,16 @@ import { Report } from './../model/report';
 export const myReportsByDate = async (ctx, date) => {
   const model = await Report();
   const userId = ctx.from.id;
-  const reportData = await model.find({ id: userId })
+  const reportData = await model.find({ id: userId });
   console.log(reportData);
   const oneReportData = reduce(reportData, (acc, el) => {
-    const shortCreationTime = el.createdAt.toISOString().split("T")[0]
+    const shortCreationTime = el.createdAt.toISOString().split('T')[0];
 
     if (shortCreationTime === date) {
-      acc.push(el)
+      acc.push(el);
     }
-    return acc
-  }, [])
-
-  console.log("oneReportData-----", oneReportData);
-
+    return acc;
+  }, []);
 
   if (!isEmpty(oneReportData)) {
     const {
@@ -25,20 +22,20 @@ export const myReportsByDate = async (ctx, date) => {
       question3,
       question4,
       question5,
-      question6
+      question6,
     } = reportData[0].toObject();
-    console.log("ka reportData")
+    console.log('ka reportData');
     return {
       question1,
       question2,
       question3,
       question4,
       question5,
-      question6
-    }
+      question6,
+    };
   }
   else {
-    return "Oops! You have no data"
+    return 'Oops! You have no data';
   }
-}
+};
 

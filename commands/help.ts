@@ -1,1 +1,1 @@
-export const helpCommand = (ctx) => ctx.reply('Send me a sticker')
+export const helpCommand = (ctx) => ctx.reply('Send me a sticker');
