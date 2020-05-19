@@ -1,4 +1,5 @@
-import { session } from 'telegraf';
+import {  Context } from 'telegraf';
+const session = require('telegraf/session');
 import { superWizard } from './wizard';
 const Telegraf = require("telegraf");
 
@@ -40,7 +41,8 @@ schedule.scheduleJob(`50 02 19 * * 1-5`, async () => {
 
   map(usersData, async (oneUserData) => {
     const x = await bot.telegram.sendPoll(oneUserData.id, 'քանի թասք ես արել էսօր՞', ['1', '2', '5', '10'],
-      { allows_multiple_answers: true });
+      { allows_multiple_answers: true },
+      { is_anonymous: false });
   });
 });
 
@@ -51,10 +53,6 @@ calendar.setDateListener(async (context, date) => {
 });
 
 // ****BotId: 1138911172****,
-
-
-
-
 
 bot.start(toDbAndStart);
 // console.log("--------------",superWizard);
@@ -71,16 +69,14 @@ bot.hears('My reports', context => {
   context.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
 });
 
+const stage = new Stage([superWizard], { default: 'super-wizard' });
 
-const stage = new Stage([superWizard]);
-bot.use(session())
-bot.use(stage.middleware())
- 
-
-bot.command('/test', (ctx)=> ctx.scene.enter('super-wizard'));
+bot.use(session());
+bot.use(stage.middleware());
+bot.command('test', ctx => ctx.scene.enter('super-wizard'));
+bot.launch();
 
 bot.hears('yes', ctx => {
-
   ctx.reply('հարց 1');
 });
 
