@@ -1,4 +1,3 @@
-import {  Context } from 'telegraf';
 const session = require('telegraf/session');
 import { superWizard } from './wizard';
 const Telegraf = require("telegraf");
@@ -55,7 +54,7 @@ calendar.setDateListener(async (context, date) => {
 // ****BotId: 1138911172****,
 
 bot.start(toDbAndStart);
-// console.log("--------------",superWizard);
+bot.help(helpCommand);
 
 bot.on('sticker', (ctx) => ctx.reply('լավն էր'));
 
@@ -69,11 +68,11 @@ bot.hears('My reports', context => {
   context.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
 });
 
-const stage = new Stage([superWizard], { default: 'super-wizard' });
+const stage = new Stage([superWizard]);
 
 bot.use(session());
 bot.use(stage.middleware());
-bot.command('test', ctx => ctx.scene.enter('super-wizard'));
+bot.command('/test', ctx => ctx.scene.enter('super-wizard'));
 bot.launch();
 
 bot.hears('yes', ctx => {
