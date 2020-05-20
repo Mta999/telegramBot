@@ -449,14 +449,56 @@ const superWizard = new WizardScene(
 );
 const stage = new Stage([superWizard], { default: 'super-wizard' });
 
-const bot = new Telegraf("1138911172:AAGvt8jYQmXotSZa5do-qhKtz0qNkHAl0Fs");
+// const bot = new Telegraf(token);
 
 
 // bot.command('test', (ctx) => ctx.scene.enter('super-wizard'));
 
-bot.use(session());
-bot.use(stage.middleware());
-bot.command('test', ctx => {
-    ctx.scene.enter('super-wizard');
-   });
-bot.launch();
+// bot.use(session());
+// bot.use(stage.middleware());
+// bot.command('test', ctx => {
+//     ctx.scene.enter('super-wizard');
+//    });
+// bot.launch();
+
+
+
+// import WizardScene from 'telegraf/scenes/wizard';
+// import { Extra, Markup } from 'telegraf';
+// const WizardScene = require('telegraf/scenes/wizard');
+
+
+
+// const chooseTime =  Markup.inlineKeyboard([
+//   Markup.callbackButton('11:00','11:00'),
+//   Markup.callbackButton('12:00','12:00'),
+//   Markup.callbackButton('13:00','13:00'),
+//   Markup.callbackButton('Choose other time','Choose other time')
+//     ]).oneTime()
+//     .resize();
+
+
+// export const superWizard = new WizardScene('super-wizard',
+//  async (ctx) => {
+//    console.log('aaaaaaaaaaaaaaaaaaaaaaaaa');
+
+//      await ctx.telegram.sendMessage(796175303,'When you started your working day yesterday ?', Extra.markup(chooseTime))
+//      console.log(2222222);
+//      // ctx-update-callbackquery-data
+//      console.log('++++++++++++++++++++++++++',ctx.wizard.ctx) //undefined
+//     console.log('------------------------',ctx);
+//     return ctx.wizard.next();
+//   },
+//   (ctx) => {
+//     ctx.reply('Step 3');
+//     return ctx.wizard.next();
+//   },
+//   (ctx) => {
+//     ctx.reply('Step 4');
+//     return ctx.wizard.next();
+//   },
+//   (ctx) => {
+//     ctx.reply('Done');
+//     return ctx.scene.leave();
+//   }
+// );

@@ -2,7 +2,7 @@ const Telegraf = require('telegraf');
 const session = require('telegraf/session');
 const Stage = require('telegraf/stage');
 const WizardScene = require('telegraf/scenes/wizard');
-import { Extra, Markup } from 'telegraf';
+import { Extra, Markup, Context } from 'telegraf';
 
 const tasks = [];
 
@@ -25,14 +25,14 @@ const chooseProjects = Markup.keyboard([
 ]).oneTime()
   .resize();
 
-  
+
 const chooseProjectOrNo = Markup.keyboard([
   ['4nextLab', 'bitCluster'],
   ['Blot', 'KW'],
   ['No']
 ]).oneTime()
   .resize();
-  
+
 export const superWizard = new WizardScene(
   'super-wizard',
   (ctx) => {
@@ -51,23 +51,33 @@ export const superWizard = new WizardScene(
     return ctx.wizard.next();
   },
   ctx => {
-    // ctx.wizard.state.data.whatTask = ctx.message.text;
-    tasks.push(ctx.message.text)
-    ctx.telegram.sendMessage(796175303, 'բա բացի դրանցից՞', Extra.markup(chooseProjects))
-    //  console.log('55555555555', ctx.wizard.state.data);
-    // return ctx.scene.leave();
-    return ctx.wizard.next();
-  },
-  ctx => {
+    const firstTask= ctx.message.text;
     tasks.push(ctx.message.text);
     ctx.wizard.state.data.whatTasks = tasks;
     ctx.telegram.sendMessage(796175303, 'եթե էլի կա, նշեք, եթե չէ՝ սեղմեք NO', Extra.markup(chooseProjectOrNo))
-    console.log('55555555555', ctx.wizard.state.data);
-    return ctx.scene.leave();
-    // return ctx.wizard.next();
-  },
-  ctx =>{
+    console.log(ctx.message.text);
     
+    // return ctx.scene.leave();
+    return ctx.wizard.next(firstTask);
+  },
+  ctx => {
+    console.log('-----------------',ctx.wizard.state.data.whatTasks[0]);
+    
+    // if (firstTask ) {
+      
+    // }
+    tasks.push(ctx.message.text);
+    ctx.reply('առաջարկություն կամ խնդիրներ՞');
+    console.log('55555555555', ctx.wizard.state.data);
+
+    return ctx.wizard.next();
+
+    // return ctx.scene.leave();
+  },
+  ctx => {
+    ctx.reply('Ապրես,')
+    console.log('առաջարկություն կամ խնդիրներ՞', ctx.message.text);
+    return ctx.scene.leave();
   }
 );
 

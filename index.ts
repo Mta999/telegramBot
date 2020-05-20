@@ -39,9 +39,7 @@ schedule.scheduleJob(`50 02 19 * * 1-5`, async () => {
   const usersData = await model.find();
 
   map(usersData, async (oneUserData) => {
-    const x = await bot.telegram.sendPoll(oneUserData.id, 'քանի թասք ես արել էսօր՞', ['1', '2', '5', '10'],
-      { allows_multiple_answers: true },
-      { is_anonymous: false });
+   
   });
 });
 
