@@ -1,20 +1,11 @@
-import { Extra, Markup } from 'telegraf';
+import { Extra } from 'telegraf';
 import { User } from '../model/user';
+import { firstMenu } from './buttons';
 
-
- export const menu = Markup.keyboard([
-   ['My reports', 'Support']
-  ]).oneTime()
-  .resize();
-
-export const yesOrRemindMeLater =  Markup.keyboard([
-  ['Yes', 'Remind me Later']
-  ]).oneTime()
-  .resize();
 
 export const toDbAndStart = async (ctx) => {
   const startCommand = ((ctx) => {
-      ctx.telegram.sendMessage(ctx.chat.id, 'Բայլուս', Extra.markup(menu)); // , menu
+      ctx.telegram.sendMessage(ctx.chat.id, 'Բայլուս', Extra.markup(firstMenu)); // , menu
   }); 
   startCommand(ctx);
   
