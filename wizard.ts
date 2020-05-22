@@ -1,10 +1,16 @@
-const Telegraf = require('telegraf');
-const session = require('telegraf/session');
-const Stage = require('telegraf/stage');
+import { User } from './model/user';
+import { Report } from './model/report';
 const WizardScene = require('telegraf/scenes/wizard');
-import { Extra, Markup, Context } from 'telegraf';
+import { Extra, Markup } from 'telegraf';
+import { map } from 'lodash';
 
 const tasks = [];
+
+
+export const saveOrNo = Markup.keyboard([
+  ['Save',"Don't save" ]
+ ]).oneTime()
+ .resize();
 
 const chooseTime: Markup = Markup.keyboard([
   ['11:00', '12:00'],
@@ -32,53 +38,71 @@ const chooseProjectOrNo = Markup.keyboard([
   ['No']
 ]).oneTime()
   .resize();
-
+  
 export const superWizard = new WizardScene(
   'super-wizard',
-  (ctx) => {
-    ctx.telegram.sendMessage(796175303, 'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime))
+  ctx => {
+    console.log('-------------------',ctx.from.id,);
+    ctx.telegram.sendMessage(ctx.from.id, 'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime))
     ctx.wizard.state.data = {};
     return ctx.wizard.next();
   },
   ctx => {
     ctx.wizard.state.data.workTime = ctx.message.text;
-    ctx.telegram.sendMessage(796175303, 'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers))
+    ctx.telegram.sendMessage(ctx.from.id, 'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers))
     return ctx.wizard.next();
   },
   ctx => {
     ctx.wizard.state.data.tasksCounter = ctx.message.text;
-    ctx.telegram.sendMessage(796175303, 'ինչ պրոյեկտների վրա ես աշխատել', Extra.markup(chooseProjects))
+    ctx.telegram.sendMessage(ctx.from.id, 'ինչ պրոյեկտների վրա ես աշխատել', Extra.markup(chooseProjects))
     return ctx.wizard.next();
   },
   ctx => {
-    const firstTask= ctx.message.text;
+    const firstTask = ctx.message.text;
     tasks.push(ctx.message.text);
     ctx.wizard.state.data.whatTasks = tasks;
-    ctx.telegram.sendMessage(796175303, 'եթե էլի կա, նշեք, եթե չէ՝ սեղմեք NO', Extra.markup(chooseProjectOrNo))
+    ctx.telegram.sendMessage(ctx.from.id, 'եթե էլի կա, նշեք, եթե չէ՝ սեղմեք NO', Extra.markup(chooseProjectOrNo))
     console.log(ctx.message.text);
-    
+
     // return ctx.scene.leave();
     return ctx.wizard.next(firstTask);
   },
   ctx => {
-    console.log('-----------------',ctx.wizard.state.data.whatTasks[0]);
-    
+    console.log('-----------------', ctx.wizard.state.data.whatTasks[0]);
     // if (firstTask ) {
-      
+
     // }
     tasks.push(ctx.message.text);
     ctx.reply('առաջարկություն կամ խնդիրներ՞');
     console.log('55555555555', ctx.wizard.state.data);
-
     return ctx.wizard.next();
-
     // return ctx.scene.leave();
   },
   ctx => {
-    ctx.reply('Ապրես,')
+    ctx.telegram.sendMessage(ctx.from.id, 'Ապրես Դու', Extra.markup(saveOrNo))
+    ctx.wizard.state.data.blocksOrQuestions = ctx.message.text;
     console.log('առաջարկություն կամ խնդիրներ՞', ctx.message.text);
-    return ctx.scene.leave();
-  }
-);
+    // return ctx.scene.leave();
+    return ctx.wizard.next();
+  },
+  async (ctx, date:Date) => {
+    const model = await Report();
+    const userId = ctx.from.id;
+    console.log(userId);
+    console.log(date);
 
-// return ctx.scene.leave();
+
+    const userData = await model.findOne({ id: userId });
+    await model.create(
+      {
+        id: userId,
+        startingTime: ctx.wizard.state.data.workTime,
+        workedProjects: tasks,
+        tasksCount: ctx.wizard.state.data.tasksCounter,
+        blocksOrQuestions: ctx.wizard.state.data.blocksOrQuestions,
+        date: date
+      });
+
+    return ctx.scene.leave();
+  });
+
