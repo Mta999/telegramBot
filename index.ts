@@ -1,8 +1,8 @@
-const session = require('telegraf/session');
 import { superWizard } from './wizard';
+const session = require('telegraf/session');
 const Telegraf = require("telegraf");
 
-import { Stage } from 'telegraf';
+import { Stage, Extra, Markup } from 'telegraf';
 
 // tslint:disable-next-line: no-var-requires
 const Calendar = require('telegraf-calendar-telegram');
@@ -13,6 +13,7 @@ import { toDbAndStart, helpCommand, myReportsByDate } from './commands/index';
 import { map } from 'lodash';
 import { connectReportDb } from './db/reportsDb/index';
 
+import { yesOrRemindMeLater } from './commands/buttons/yesOrRemindMeLater';
 import './env';
 
 const schedule = require('node-schedule');
@@ -33,14 +34,19 @@ const token = process.env.BOT_TOKEN;
 const bot = new Telegraf(token);
 const calendar = new Calendar(bot);
 
-schedule.scheduleJob(`50 02 19 * * 1-5`, async () => {
+
+
+
+
+schedule.scheduleJob(`0 14 14 * * 1-5`, async (ctx) => {
   console.log('հեսա ուղարկեմ ');
   const model = await User();
   const usersData = await model.find();
 
-  map(usersData, async (oneUserData) => {
-   
-  });
+  const letsStartTest = Promise.all([map(usersData, async (oneUserData) => {
+    await bot.telegram.sendMessage(oneUserData.id, 'please click YES button or type /test', Extra.markup(yesOrRemindMeLater));
+    letsStartTest.catch(e => console.log(e))
+  })]);
 });
 
 calendar.setDateListener(async (context, date) => {
@@ -49,7 +55,7 @@ calendar.setDateListener(async (context, date) => {
   );
 });
 
-// ****BotId: 1138911172****,
+// **** BotId: 1138911172 ****,
 
 bot.start(toDbAndStart);
 bot.help(helpCommand);
@@ -66,16 +72,39 @@ bot.hears('My reports', context => {
   context.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
 });
 
+
+
+
+const support = Markup.inlineKeyboard([
+  Markup.urlButton('Support', 'http://telegraf.js.org'),
+])
+
+const supportButton = async (ctx) => {
+
+  const model = await User();
+  const usersData = await model.find();
+
+  Promise.all([map(usersData, async (oneUserData) => {
+    
+    console.log('from', ctx.from.id);
+    console.log('oneuserdata.id', oneUserData.id);
+    
+    if (oneUserData.id == ctx.from.id) {
+      
+      return ctx.telegram.sendMessage(oneUserData.id, 'Կապ Մեզ հետ', Extra.markup(support))
+    } return
+  })]);
+}
+
+bot.hears('Support', supportButton)
+
+
 const stage = new Stage([superWizard]);
 
 bot.use(session());
 bot.use(stage.middleware());
 bot.command('/test', ctx => ctx.scene.enter('super-wizard'));
-bot.launch();
-
-bot.hears('yes', ctx => {
-  ctx.reply('հարց 1');
-});
+bot.hears('Yes 👍🏻 💪🏻', (ctx) => ctx.scene.enter('super-wizard'));
 
 bot.launch();
 
