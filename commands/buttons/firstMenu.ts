@@ -1,4 +1,4 @@
-import { Markup } from "telegraf";
+import { Markup } from 'telegraf';
 
 export const firstMenu = Markup.keyboard([
     ['My reports', 'Support']

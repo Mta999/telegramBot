@@ -427,7 +427,7 @@ const chooseTime = Markup.keyboard([
 const superWizard = new WizardScene(
   'super-wizard',
    (ctx) => {
-      ctx.telegram.sendMessage(797417047,'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime))
+      ctx.telegram.sendMessage(797417047, 'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime));
     ctx.wizard.state.data = {};    
     return ctx.wizard.next();
   },
@@ -435,7 +435,7 @@ const superWizard = new WizardScene(
       console.log(ctx);
       
     ctx.wizard.state.data.time = ctx.message.text;
-    ctx.telegram.sendMessage(797417047,'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers))
+    ctx.telegram.sendMessage(797417047, 'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers));
     return ctx.wizard.next();
   },
   ctx => {

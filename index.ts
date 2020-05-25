@@ -1,6 +1,6 @@
+const Telegraf = require('telegraf');
 import { superWizard } from './wizard';
 const session = require('telegraf/session');
-const Telegraf = require("telegraf");
 
 import { Stage, Extra, Markup } from 'telegraf';
 
@@ -34,20 +34,20 @@ const token = process.env.BOT_TOKEN;
 const bot = new Telegraf(token);
 const calendar = new Calendar(bot);
 
+const support = Markup.inlineKeyboard([
+  Markup.urlButton('Support', 'https://steadfast.tech/'),
+]);
 
-
-
-
-schedule.scheduleJob(`0 14 14 * * 1-5`, async (ctx) => {
-  console.log('հեսա ուղարկեմ ');
+schedule.scheduleJob(`50 10 19 * * 1-5`, async (ctx) => {
+  console.log('հեսա ուղարկեմ');
   const model = await User();
   const usersData = await model.find();
-
   const letsStartTest = Promise.all([map(usersData, async (oneUserData) => {
     await bot.telegram.sendMessage(oneUserData.id, 'please click YES button or type /test', Extra.markup(yesOrRemindMeLater));
-    letsStartTest.catch(e => console.log(e))
+    letsStartTest.catch(e => console.log(e));
   })]);
 });
+
 
 calendar.setDateListener(async (context, date) => {
   return context.reply(
@@ -62,22 +62,15 @@ bot.help(helpCommand);
 
 bot.on('sticker', (ctx) => ctx.reply('լավն էր'));
 
-bot.hears('My reports', context => {
+bot.hears('My reports', ctx => {
   const today = new Date();
   const minDate = new Date();
   minDate.setMonth(today.getMonth() - 2);
   const maxDate = new Date();
   maxDate.setMonth(today.getMonth() + 2);
   maxDate.setDate(today.getDate());
-  context.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
+  ctx.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
 });
-
-
-
-
-const support = Markup.inlineKeyboard([
-  Markup.urlButton('Support', 'http://telegraf.js.org'),
-])
 
 const supportButton = async (ctx) => {
 
@@ -85,19 +78,13 @@ const supportButton = async (ctx) => {
   const usersData = await model.find();
 
   Promise.all([map(usersData, async (oneUserData) => {
-    
-    console.log('from', ctx.from.id);
-    console.log('oneuserdata.id', oneUserData.id);
-    
     if (oneUserData.id == ctx.from.id) {
-      
-      return ctx.telegram.sendMessage(oneUserData.id, 'Կապ Մեզ հետ', Extra.markup(support))
-    } return
+      ctx.telegram.sendMessage(oneUserData.id, 'Կապ Մեզ հետ', Extra.markup(support));
+    } return;
   })]);
-}
+};
 
-bot.hears('Support', supportButton)
-
+bot.hears('Support', supportButton);
 
 const stage = new Stage([superWizard]);
 
@@ -106,8 +93,16 @@ bot.use(stage.middleware());
 bot.command('/test', ctx => ctx.scene.enter('super-wizard'));
 bot.hears('Yes 👍🏻 💪🏻', (ctx) => ctx.scene.enter('super-wizard'));
 
+bot.hears('Remind me Later 🤯 😈', (ctx)=>{
+  setTimeout(() => {
+    bot.telegram.sendMessage(ctx.from.id, 'please click YES button or type /test', Extra.markup(yesOrRemindMeLater));
+  }, 1000*60*60);
+});
+
+// here stage and bot are the same, bot contains mini-bots in it, such as a stage
+
 bot.launch();
 
-export {
-  UserInterface, User
-};
+// export {
+//   UserInterface, User
+// };

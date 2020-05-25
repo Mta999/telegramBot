@@ -11,11 +11,11 @@ export const ReportSchema = new Schema({
 });
 
 export interface ReportInterface extends Document {
-    id: String,
-    startingTime: String,
-    workedProjects: Array<String>,
-    tasksCount: String,
-    blocksOrQuestions: String,
+    id: String;
+    startingTime: String;
+    workedProjects: String[];
+    tasksCount: String;
+    blocksOrQuestions: String;
     createdAt: Date; 
 }
 export const Report = async (): Promise<Model<ReportInterface, {}>> => {
