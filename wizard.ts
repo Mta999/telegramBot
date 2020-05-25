@@ -104,14 +104,22 @@ export const superWizard = new WizardScene(
           });
       }
     })(ctx, new Date);
+    
+    ctx.telegram.sendMessage('@steadFastTech', ` ${ctx.from.first_name} ${ctx.from.last_name}'s daily report for today is:
+
+    He/She start her/him work at ${ctx.wizard.state.data.workTime}
+
+    He/She had done ${ctx.wizard.state.data.tasksCounter} tasks
+
+    And he/she worked with these projects: ${tasks}` );
     return ctx.scene.leave();
   }
 
 );
 
-
-
-
+  //channels id - @steadFastTech
+  
+    //I want something like that 
 
    // `Your daily report for ${date} is
 
