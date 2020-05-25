@@ -100,9 +100,7 @@ bot.hears('Remind me Later 🤯 😈', (ctx)=>{
 });
 
 // here stage and bot are the same, bot contains mini-bots in it, such as a stage
+//channel's link- https://t.me/joinchat/AAAAAE7c_ZRDyf2kz6rJwg channel's link
+//bot's link- http://telegram.me/my_reports_bot
 
 bot.launch();
-
-// export {
-//   UserInterface, User
-// };
