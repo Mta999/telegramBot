@@ -6,30 +6,34 @@ export const myReportsByDate = async (ctx: Context, date: Date) => {
   const model = await Report();
   const userId = ctx.from.id;
   const reportData = await model.find({ id: userId });
-  
+
   const oneReportData = reduce(reportData, (acc, el) => {
     const shortCreationTime = el.createdAt.toISOString().split('T')[0];
     if (shortCreationTime === date) {
       acc.push(el);
     }
-    console.log('5555555555555',date);
-    
     return acc;
   }, []);
-  
-  if ( !isEmpty(oneReportData) ) {
+
+  if (!isEmpty(oneReportData)) {
     const {
       startingTime,
       workedProjects,
       tasksCount,
+      callsCounter,
+      callsLength,
+      finishingTime,
       blocksOrQuestions,
       date
     } = reportData[0].toObject();
-    console.log('ka reportData');    
+    console.log('ka reportData');
     return {
       startingTime,
       workedProjects,
       tasksCount,
+      callsCounter,
+      callsLength,
+      finishingTime,
       blocksOrQuestions,
       date
     };
@@ -39,3 +43,12 @@ export const myReportsByDate = async (ctx: Context, date: Date) => {
   }
 };
 
+export const myReports = (ctx, calendar) => {
+  const today = new Date();
+  const minDate = new Date();
+  minDate.setMonth(today.getMonth() - 2);
+  const maxDate = new Date();
+  maxDate.setMonth(today.getMonth() + 2);
+  maxDate.setDate(today.getDate());
+  ctx.reply('Նշեք, թե որ օրվա համար', calendar.setMinDate(minDate).setMaxDate(maxDate).getCalendar());
+}

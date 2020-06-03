@@ -17,3 +17,4 @@ export interface UserInterface extends Document {
 export const User = async (): Promise<Model<UserInterface, {}>>  => {
     return model<UserInterface>('users', UserSchema, 'users');
 };
+// generate id AX1875 

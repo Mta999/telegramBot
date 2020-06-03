@@ -111,7 +111,7 @@
 
 
 
-  
+
 // const CronJob = require('cron').CronJob;
 
 // console.log('Before job instantiation');
@@ -144,37 +144,37 @@
 
 // const Telegraf = require('telegraf')
 // const TelegrafInlineMenu = require('telegraf-inline-menu')
- 
+
 // const menu = new TelegrafInlineMenu(ctx => `Hey ${ctx.from.first_name}!`)
 // menu.setCommand('start')
- 
+
 // menu.simpleButton('I am excited!', 'a', {
 //   doFunc: ctx => ctx.reply('As am I!')
 // })
 // const token = process.env.BOT_TOKEN;
 
- 
+
 // const bot = new Telegraf("token")
- 
+
 // bot.use(menu.init())
- 
+
 // bot.startPolling()
 
 
 
 // import Telegraf from '@telegraf/core'
 // import session from '@telegraf/session'
- 
+
 // const bot = new Telegraf('token')
- 
+
 // bot.use(session())
- 
+
 // bot.on('text', (ctx) => {
 //   ctx.session.counter = ctx.session.counter || 0
 //   ctx.session.counter++
 //   return ctx.reply(`Message counter:${ctx.session.counter}`)
 // })
- 
+
 // bot.launch()
 
 // use - context - message -
@@ -398,56 +398,56 @@
 
 
 
-const Telegraf = require('telegraf');
-const session = require('telegraf/session');
-const Stage = require('telegraf/stage');
-const WizardScene = require('telegraf/scenes/wizard');
-import { Extra, Markup } from 'telegraf';
+// const Telegraf = require('telegraf');
+// const session = require('telegraf/session');
+// const Stage = require('telegraf/stage');
+// const WizardScene = require('telegraf/scenes/wizard');
+// import { Extra, Markup } from 'telegraf';
 
-const chooseTime = Markup.keyboard([
-    ['11:00', '12:00'],
-    ['13:00', 'Choose other time']
-   ]).oneTime()
-   .resize();
-   
-   const chooseNumbers = Markup.keyboard([
-    ['1', '2'],
-    ['5', '10']
-   ]).oneTime()
-   .resize();
+// const chooseTime = Markup.keyboard([
+//     ['11:00', '12:00'],
+//     ['13:00', 'Choose other time']
+//    ]).oneTime()
+//    .resize();
 
-// const chooseTime =  Markup.keyboard([
-//     Markup.callbackButton('11:00','11:00'),
-//     Markup.callbackButton('12:00','12:00'),
-//     Markup.callbackButton('13:00','13:00'),
-//     Markup.callbackButton('Choose other time','Choose other time')
-//       ]).oneTime()
-//       .resize();
+//    const chooseNumbers = Markup.keyboard([
+//     ['1', '2'],
+//     ['5', '10']
+//    ]).oneTime()
+//    .resize();
 
-const superWizard = new WizardScene(
-  'super-wizard',
-   (ctx) => {
-      ctx.telegram.sendMessage(797417047, 'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime));
-    ctx.wizard.state.data = {};    
-    return ctx.wizard.next();
-  },
-  ctx => {
-      console.log(ctx);
-      
-    ctx.wizard.state.data.time = ctx.message.text;
-    ctx.telegram.sendMessage(797417047, 'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers));
-    return ctx.wizard.next();
-  },
-  ctx => {
+// // const chooseTime =  Markup.keyboard([
+// //     Markup.callbackButton('11:00','11:00'),
+// //     Markup.callbackButton('12:00','12:00'),
+// //     Markup.callbackButton('13:00','13:00'),
+// //     Markup.callbackButton('Choose other time','Choose other time')
+// //       ]).oneTime()
+// //       .resize();
 
-    ctx.wizard.state.data.number = ctx.message.text;
+// const superWizard = new WizardScene(
+//   'super-wizard',
+//    (ctx) => {
+//       ctx.telegram.sendMessage(797417047, 'Երբ ես երեկ սկսել գործ անել՞ ', Extra.markup(chooseTime));
+//     ctx.wizard.state.data = {};    
+//     return ctx.wizard.next();
+//   },
+//   ctx => {
+//       console.log(ctx);
 
-    ctx.reply(`երեկ սկսել ես գործ անել ${ctx.wizard.state.data.time}-ին`);
-    ctx.reply(`Ու արել ես  ${ctx.wizard.state.data.number} հատ թասք`);
-    return ctx.scene.leave();
-  }
-);
-const stage = new Stage([superWizard], { default: 'super-wizard' });
+//     ctx.wizard.state.data.time = ctx.message.text;
+//     ctx.telegram.sendMessage(797417047, 'երեկ քանի հատ թասկ եք արել՞', Extra.markup(chooseNumbers));
+//     return ctx.wizard.next();
+//   },
+//   ctx => {
+
+//     ctx.wizard.state.data.number = ctx.message.text;
+
+//     ctx.reply(`երեկ սկսել ես գործ անել ${ctx.wizard.state.data.time}-ին`);
+//     ctx.reply(`Ու արել ես  ${ctx.wizard.state.data.number} հատ թասք`);
+//     return ctx.scene.leave();
+//   }
+// );
+// const stage = new Stage([superWizard], { default: 'super-wizard' });
 
 // const bot = new Telegraf(token);
 
@@ -502,3 +502,21 @@ const stage = new Stage([superWizard], { default: 'super-wizard' });
 //     return ctx.scene.leave();
 //   }
 // );
+
+
+const x = `
+  anun
+  azganun
+  id
+  phone
+  kjfrd
+wredfsc
+esdfc
+  `;
+const y = `
+kjfrd
+wredfsc
+esdfc
+`
+const z = [x,y].join('\n')
+console.log(z);
